@@ -1,5 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Actividades from './pages/Actividades.tsx'
 import './index.css'
 import App from './App.tsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -17,10 +19,12 @@ const queryClient = new QueryClient({
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <ProyectosProvider>
-        <App />
-      </ProyectosProvider>
-      
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/actividades" element={<Actividades />} />
+        </Routes>
+      </BrowserRouter>      
     </QueryClientProvider>
   </React.StrictMode>
 )

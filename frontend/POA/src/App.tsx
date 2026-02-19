@@ -6,17 +6,11 @@ import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Toaster, toast } from 'sonner'
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from 'recharts'
+import {  BarChart,  Bar,  XAxis,  YAxis,  CartesianGrid,  Tooltip,  ResponsiveContainer } from 'recharts'
 import { Moon, Sun, RotateCw, AlertCircle } from 'lucide-react'
 import { useProyectos } from '@/hooks/useProyectos'
+import { Link } from 'react-router-dom'
+
 
 // Hook dark mode (persistente)
 function useTheme() {
@@ -66,16 +60,9 @@ function App() {
     }
   }, [error])
 
-  const handleRefresh = async () => {
-    setRefreshing(true)
-    await refetch()
-    setRefreshing(false)
-    toast.success('Datos actualizados')
-  }
-
   return (
     <div className="min-h-screen bg-linear-to-b from-background to-muted/30">
-      <header className="border-b bg-background/80 backdrop-blur-md sticky top-0 z-30 shadow-sm">
+      <header className="border-b bg-background backdrop-blur-md sticky top-0 z-30 shadow-sm">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
@@ -89,11 +76,13 @@ function App() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            {/* <Button variant="outline" size="icon" onClick={handleRefresh} disabled={refreshing || isLoading} className={refreshing ? 'animate-spin' : ''}            >
-              <RotateCw className="h-4 w-4" />
-            </Button> */}
+          <div className="flex items gap-6">
+            <Button asChild variant="outline" className='mt-6'>
+              <Link to="/actividades">Gestionar actividades</Link>
+            </Button>
+          </div>
 
+          <div className="flex items-center gap-3">
             <Button variant="ghost" size="icon" onClick={toggle}>
               {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
@@ -150,49 +139,7 @@ function App() {
                 </CardContent>
               </Card>
             </div>
-
-            {/* Gráfico principal */}
-            <Card className="shadow-md hover:shadow-xl transition-shadow duration-300">
-              <CardHeader>
-                <div className="flex justify-between items-center">
-                  <Button variant="outline" size="icon" onClick={handleRefresh} disabled={refreshing || isLoading} className={refreshing ? 'animate-spin' : ''}            >
-              <RotateCw className="h-4 w-4" />
-            </Button>
-                  <div>
-                    <CardTitle>Avance por Proyecto</CardTitle>
-                    <CardDescription>Porcentaje de completitud actual</CardDescription>
-                  </div>
-                  <Badge variant="secondary">{proyectos.length} proyectos</Badge>
-                </div>
-              </CardHeader>
-              <CardContent className="pt-2">
-                <div className="h-[400px] w-full">
-                  <ResponsiveContainer>
-                    <BarChart data={chartData} layout="vertical" margin={{ left: 20, right: 30 }}>
-                      <CartesianGrid strokeDasharray="3 3" opacity={0.3} vertical={false} />
-                      <XAxis type="number" domain={[0, 100]} tickFormatter={v => `${v}%`} />
-                      <YAxis dataKey="nombre" type="category" width={180} tick={{ fontSize: 13 }} />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: 'hsl(var(--card))',
-                          border: '1px solid hsl(var(--border))',
-                          borderRadius: '8px',
-                          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                        }}
-                      />
-                      <Bar
-                        dataKey="completado"
-                        fill="hsl(var(--primary))"
-                        radius={[6, 6, 6, 6]}
-                        barSize={32}
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Tabla rápida de proyectos */}
+            
             {proyectos.length > 0 && (
               <Card className="shadow-md">
                 <CardHeader>
@@ -208,7 +155,7 @@ function App() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {proyectos.slice(0, 6).map(proyecto => (  // Muestra solo los primeros 6 para no saturar
+                      {proyectos.slice(0, 25).map(proyecto => ( 
                         <TableRow key={proyecto.id} className="hover:bg-muted/50 transition-colors">
                           <TableCell className="font-medium">{proyecto.nombre}</TableCell>
                           <TableCell>
